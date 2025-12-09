@@ -9,7 +9,7 @@ namespace Assignment_BussinesLogicLayer.Interfaces
 {
     public interface IDepartmentReposatory :IGenericReposatory<Department>
     {
-        List<Department> GetByName(string name);
+       Task< List<Department>> GetByNameAsync(string name);
         //IEnumerable<Department> GetAll();
         //Department? Get(int id);
         //int Add(Department department);

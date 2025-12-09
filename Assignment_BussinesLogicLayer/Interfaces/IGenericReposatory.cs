@@ -9,8 +9,8 @@ namespace Assignment_BussinesLogicLayer.Interfaces
 {
     public interface IGenericReposatory<T> where T : BaseEntity
     {
-        IEnumerable<T> GetAll();
-        T? Get(int id);
+       Task< IEnumerable<T>> GetAllAsync();
+       Task< T?> GetAsync(int id);
         int Add(T model);
         int Update(T model);
         int Delete(T model);

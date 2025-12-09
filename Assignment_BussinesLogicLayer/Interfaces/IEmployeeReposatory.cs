@@ -9,7 +9,7 @@ namespace Assignment_BussinesLogicLayer.Interfaces
 {
     public interface IEmployeeReposatory:IGenericReposatory<Employee>
     {
-        List<Employee> GetByName(string name);
+      Task<List<Employee>> GetByNameAsync(string name);
         // IEnumerable<Employee> GetAll();
         //Employee? Get(int id);
         //int Add(Employee employee);

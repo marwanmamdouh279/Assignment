@@ -16,17 +16,17 @@ namespace Assignment.Controllers
             _departmentReposatory = departmentReposatory;
         }
         [HttpGet]
-        public IActionResult Index(String? SearchInput, int page = 1)
+        public async  Task<IActionResult> Index(String? SearchInput, int page = 1)
         {
             int pageSize = 5;
             IEnumerable<Department> departments;
             if (String.IsNullOrEmpty(SearchInput))
             {
-               departments = _departmentReposatory.GetAll();
+               departments = await _departmentReposatory.GetAllAsync();
             }
             else
             {
-                 departments = _departmentReposatory.GetByName(SearchInput);
+                 departments = await _departmentReposatory.GetByNameAsync(SearchInput);
             }
            
             ViewBag.Count = departments.Count();
@@ -70,33 +70,33 @@ namespace Assignment.Controllers
         }
         [HttpGet]
         
-        public IActionResult RefactorActionFunction (int? id ,String ViewName )
+        public async Task< IActionResult> RefactorActionFunction (int? id ,String ViewName )
         {
             if (id is null) { return BadRequest("Id Is Invalid! "); }
-            var departments = _departmentReposatory.Get(id.Value);  // (value) because nullability progrition  
+            var departments = await _departmentReposatory.GetAsync(id.Value);  // (value) because nullability progrition  
             if (departments == null) { return NotFound($"Department With Id {id} Is Not Found ! "); }
             else   return View(ViewName, departments);
         }
 
         [HttpGet]
         //get (open) form 
-        public IActionResult Details (int? id)
+        public async Task<IActionResult> Details (int? id)
         {
             //if (id is null) { return BadRequest("Id Is Invalid! "); }
             //var departments = _departmentReposatory.Get(id.Value);  // (value) because nullability progrition  
             //if (departments == null) { return NotFound($"Department With Id {id} Is Not Found ! "); }
-            return RefactorActionFunction(id, "Details");
+            return await RefactorActionFunction(id, "Details");
         }
 
 
             [HttpGet]
         //get (open) form 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             //if (id is null) { return BadRequest("Id Is Invalid! "); }
             //var departments = _departmentReposatory.Get(id.Value);  // (value) because nullability progrition  
             //if (departments == null) { return NotFound($"Department With Id {id} Is Not Found ! "); }
-             return RefactorActionFunction(id,"Edit");
+             return await RefactorActionFunction(id,"Edit");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]  // prevent any request out of application
@@ -119,12 +119,12 @@ namespace Assignment.Controllers
              return View(department);
         }
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             //if (id is null) { return BadRequest("Id Is Invalid! "); }
             //var departments = _departmentReposatory.Get(id.Value);  // (value) because nullability progrition  
             //if (departments == null) { return NotFound($"Department With Id {id} Is Not Found ! "); }
-             return RefactorActionFunction(id,"Delete");
+             return await RefactorActionFunction(id,"Delete");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

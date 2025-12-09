@@ -19,9 +19,9 @@ namespace Assignment_BussinesLogicLayer.Reposatories
             _context = context;
         } //ask CLR to create Oj from AssignmentContext
 
-        public List<Employee> GetByName(string name)
+        public async Task< List<Employee>> GetByNameAsync(string name)
         {
-            return _context.Employees.Include(D=>D.Department).Where(e=>e.Name.ToLower().Contains(name.ToLower())).ToList();
+            return await _context.Employees.Include(D=>D.Department).Where(e=>e.Name.ToLower().Contains(name.ToLower())).ToListAsync();
         }
     }
 }

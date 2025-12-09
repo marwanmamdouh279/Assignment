@@ -21,18 +21,18 @@ namespace Assignment.Controllers
            _departmentReposatory = departmentReposatory;
         }
         [HttpGet]
-        public IActionResult Index( String? SearchInput , int page = 1)
+        public async Task< IActionResult >Index( String? SearchInput , int page = 1)
         {
             int pageSize = 5;
 
             IEnumerable<Employee> employees;
             if(String.IsNullOrEmpty(SearchInput))
             {
-                 employees = _employeeReposatory.GetAll();
+                 employees = await _employeeReposatory.GetAllAsync();
             }
             else
             {
-                 employees = _employeeReposatory.GetByName(SearchInput);
+                 employees = await _employeeReposatory.GetByNameAsync(SearchInput);
             }
             // View Storage (memory)=> Dictionary Accessd by key&value 
             //viewdata,viewbag like [indexer]:tranfer extra info from controller to view 
@@ -49,9 +49,9 @@ namespace Assignment.Controllers
             return View(employees);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task< IActionResult> Create()
         {
-            var department = _departmentReposatory.GetAll();
+            var department = await _departmentReposatory.GetAllAsync();
             //return View(department);      // not valid model has data from type CreateEmployeeDte
 
             ViewData["departments"] = department;
@@ -60,7 +60,7 @@ namespace Assignment.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]  // prevent any request out of application
 
-        public IActionResult Create(CreateEmployeeDto model)
+        public  IActionResult Create(CreateEmployeeDto model)
         {
             if (ModelState.IsValid)             // server side validation   (check data coming from isss valid throw validations in dtos(name,code,createAt )is req
 
@@ -79,7 +79,7 @@ namespace Assignment.Controllers
 
                 //};
                  var employee=_mapper.Map<Employee>(model);
-                var count = _employeeReposatory.Add(employee);
+                var count =  _employeeReposatory.Add(employee);
                 if (count > 0)
                 {
                     TempData["message"] = "Employee Is Created Sucssesfully :) ";
@@ -90,26 +90,26 @@ namespace Assignment.Controllers
         }
         [HttpGet]
 
-        public IActionResult RefactorActionFunction(int? id, String ViewName)
+        public async  Task<IActionResult> RefactorActionFunction(int? id, String ViewName)
         {
             if (id is null) { return BadRequest("Id Is Invalid! "); }
-            var employees = _employeeReposatory.Get(id.Value);  // (value) because nullability progrition  
+            var employees =  await _employeeReposatory.GetAsync(id.Value);  // (value) because nullability progrition  
             if (employees == null) { return NotFound($"Employee With Id {id} Is Not Found ! "); }
             else return View(ViewName, employees);
         }
         [HttpGet]
 
-        public IActionResult Details(int? id )
+        public Task<IActionResult> Details(int? id )
         {
             return RefactorActionFunction(id, "Details");
         }
 
         [HttpGet]
-        public IActionResult Edit(int?id)
+        public async Task<IActionResult> Edit(int?id)
         {
-            var department = _departmentReposatory.GetAll();
+            var department =  await _departmentReposatory.GetAllAsync();
             ViewData["departments"] = department;
-            return RefactorActionFunction(id, "Edit");
+            return await RefactorActionFunction(id, "Edit");
 
         }
         [HttpPost]
@@ -133,9 +133,9 @@ namespace Assignment.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int?id)
+        public async  Task<IActionResult> Delete(int?id)
         {
-          return  RefactorActionFunction(id, "Delete");
+          return  await RefactorActionFunction(id, "Delete");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]  // prevent any request out of application
