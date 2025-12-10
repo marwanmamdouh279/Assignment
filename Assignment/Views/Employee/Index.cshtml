@@ -77,11 +77,11 @@
                     <td>@item.HiringDate</td>
                     <td>@if (item.Department is null)
                         {
-                        <td> No Department </td>
-                        }
+                              @:   No Department
+                       }
                         else
                         {
-                        <td> @item.Department.Name</td>
+                         @item.Department.Name
                         }
                     <td>
                             @*                           send id as info from index to details page to prevent invalid id problem
